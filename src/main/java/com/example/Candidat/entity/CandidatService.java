@@ -4,11 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidatService {
     @Autowired
     private CandidatRepository candidateRepository;
+
+    @Autowired
+    private JobClient jobServiceClient;
+    public List<Job> getJobs() {
+        return jobServiceClient.getAllJobs();
+    }
+    public Job getJobById(int id) {
+        return jobServiceClient.getJobById(id);
+    }
+
+    public List<Job> getFavoriteJobs(int candidateId) {
+        Candidat candidate = candidateRepository.findById(candidateId).get();
+        return candidate.getFavoriteJobs().stream()
+                .map(jobServiceClient::getJobById)
+                .collect(Collectors.toList());
+    }
+    public void saveFavoriteJob(int candidateId, int jobId) {
+        Candidat candidate = candidateRepository.findById(candidateId).get();
+        candidate.getFavoriteJobs().add(jobId);
+        candidateRepository.save(candidate);
+    }
+
+
 
     public Candidat addCandidat(Candidat candidate) {
         return candidateRepository.save(candidate);

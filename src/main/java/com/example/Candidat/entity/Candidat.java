@@ -1,9 +1,13 @@
 package com.example.Candidat.entity;
 
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Candidat {
@@ -14,10 +18,20 @@ public class Candidat {
     private String prenom;
     private String email;
 
+    @ElementCollection
+    private Set<Integer> favoriteJobs = new HashSet<>();
+
     public Candidat(String nom, String prenom, String email) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
+    }
+
+    public Candidat(String nom, String prenom, String email, Set<Integer> favoriteJobs) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.favoriteJobs = favoriteJobs;
     }
 
     public Candidat() {
@@ -45,5 +59,13 @@ public class Candidat {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Integer> getFavoriteJobs() {
+        return favoriteJobs;
+    }
+
+    public void setFavoriteJobs(Set<Integer> favoriteJobs) {
+        this.favoriteJobs = favoriteJobs;
     }
 }
